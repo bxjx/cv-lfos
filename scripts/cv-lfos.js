@@ -55,10 +55,14 @@ document.querySelector('#add-lfo').addEventListener('click', () => {
     slider.remove()
     selectWave.remove()
     button.remove()
+    container.remove()
   }, false)
-  controls.appendChild(slider)
-  controls.appendChild(selectWave)
-  controls.appendChild(button)
+  container = document.createElement('div')
+  container.className = 'lfo-container'
+  control = controls.appendChild(container)
+  control.appendChild(slider)
+  control.appendChild(selectWave)
+  control.appendChild(button)
   lfo.start(0)
 })
 
