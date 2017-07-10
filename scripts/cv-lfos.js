@@ -20,6 +20,13 @@ let waves = [
   {type: 'sawtooth', label: 'W'}
 ]
 
+hfo_container = document.querySelector('#hfo-controls')
+hfo_container.className = 'lfo-container'
+let slider = create_slider(hfo, min=20, max=20000)
+let selectWave = create_wave_selector(hfo)
+hfo_container.appendChild(slider)
+hfo_container.appendChild(selectWave)
+
 document.querySelector('#add-lfo').addEventListener('click', create_modulator_lfo)
 
 
@@ -51,11 +58,11 @@ function create_modulator_lfo() {
 }
 
 
-function create_slider(lfo) {
+function create_slider(lfo, min=1, max=1000) {
   let slider = document.createElement('input')
   slider.type = 'range'
-  slider.setAttribute('min', 1)
-  slider.setAttribute('max', 1000)
+  slider.setAttribute('min', min)
+  slider.setAttribute('max', max)
   slider.setAttribute('step', 10)
   slider.value = lfo.frequency.value * 100
   slider.addEventListener('input', function () {

@@ -2,8 +2,12 @@ input[type=range] {
   -webkit-appearance: none;
   flex-basis: 80%;
   margin: 9.05px 0;
-
 }
+
+#hfo-controls input[type=range] {
+  flex-basis: 90%;
+}
+
 input[type=range]:focus {
   outline: none;
 
