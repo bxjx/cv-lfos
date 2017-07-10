@@ -20,32 +20,16 @@ let waves = [
   {type: 'sawtooth', label: 'W'}
 ]
 
-document.querySelector('#add-lfo').addEventListener('click', () => {
+document.querySelector('#add-lfo').addEventListener('click', create_modulator_lfo)
+
+
+function create_modulator_lfo() {
   let lfo = context.createOscillator()
   let initial = Math.floor(Math.random() * 100)
   lfo.frequency.value = initial / 100
   lfo.connect(modulationGain)
-  let selectWave = document.createElement('select')
-  let createOption = (wave) => {
-    let option = document.createElement('option')
-    option.value = wave.type
-    option.appendChild(document.createTextNode(wave.label))
-    return option
-  }
-  let appendOption = option =>  selectWave.appendChild(option)
-  R.forEach(appendOption, R.map(createOption, waves))
-  selectWave.onchange = function() { lfo.type = this.value }
-  selectWave.value = R.nth(Math.floor(Math.random() * waves.length), waves).type
-  selectWave.onchange()
-  let slider = document.createElement('input')
-  slider.type = 'range'
-  slider.setAttribute('min', 1)
-  slider.setAttribute('max', 1000)
-  slider.setAttribute('step', 10)
-  slider.value = initial
-  slider.addEventListener('input', function () {
-    lfo.frequency.value = this.value / 100
-  }, false)
+  let selectWave = create_wave_selector(lfo)
+  let slider = create_slider(lfo)
   let button = document.createElement('button')
   button.className = 'remove'
   button.appendChild(document.createTextNode('␡'))
@@ -64,6 +48,34 @@ document.querySelector('#add-lfo').addEventListener('click', () => {
   control.appendChild(selectWave)
   control.appendChild(button)
   lfo.start(0)
-})
+}
 
 
+function create_slider(lfo) {
+  let slider = document.createElement('input')
+  slider.type = 'range'
+  slider.setAttribute('min', 1)
+  slider.setAttribute('max', 1000)
+  slider.setAttribute('step', 10)
+  slider.value = lfo.frequency.value * 100
+  slider.addEventListener('input', function () {
+    lfo.frequency.value = this.value / 100
+  }, false)
+  return(slider)
+}
+
+function create_wave_selector(lfo) {
+  let selectWave = document.createElement('select')
+  let createOption = (wave) => {
+    let option = document.createElement('option')
+    option.value = wave.type
+    option.appendChild(document.createTextNode(wave.label))
+    return option
+  }
+  let appendOption = option =>  selectWave.appendChild(option)
+  R.forEach(appendOption, R.map(createOption, waves))
+  selectWave.onchange = function() { lfo.type = this.value }
+  selectWave.value = R.nth(Math.floor(Math.random() * waves.length), waves).type
+  selectWave.onchange()
+  return(selectWave)
+}
